@@ -1,17 +1,17 @@
 from prestapyt import PrestaShopWebService
 
-KEY = 'RTPXKUQGENJFV8XL1EJX1Y41DUICVMYK' #Insert your API Key here
-SHOP_API_ENDPOINT = 'http://localhost:8080/api'
+KEY = 'CETCXX3BI33HZTB7AK27NM9YYG5WZPH9' #Insert your API Key here
+SHOP_API_ENDPOINT = 'http://localhost:8080/api/'
 
-connection = PrestaShopWebService(SHOP_API_ENDPOINT, KEY)
+prestashop = PrestaShopWebService(SHOP_API_ENDPOINT, KEY)
 
 def add_product():
     prestashop = PrestaShopWebService(SHOP_API_ENDPOINT, KEY)
 
 
 def get_all_products():
-    prestashop = connection.get('products')
-    print(prestashop)
+    products = prestashop.get('products')
+    print(products)
 
 
 if __name__ == '__main__':
