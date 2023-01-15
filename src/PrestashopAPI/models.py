@@ -3,31 +3,52 @@
 
 class Product:
     id = None
-    id_manufacturer = None
-    id_supplier = None
-    id_category_default = None
-    new = None
-    cache_default_attribute = None
-    id_default_image = None
-    id_default_combination = None
-    id_tax_rules_group = None
-    position_in_category = None
-    type = None
-    id_shop_default = None
     reference = None
-    supplier_reference = None
-    location = None
-    width = None
-    height = None
-    depth = None
-    weight = None
-    quantity_discount = None
-    ean13 = None
-    isbn = None
-    upc = None
-    mpn = None
-    cache_is_pack = None
-    cache_has_attachments = None
-    is_virtual = None
-    state = None
-    additional_delivery_times = None
+    name = None
+    description = None
+
+    def set_description(self, description, language_id):
+        description_dict = self.description or {}
+        description_dict[language_id] = description
+        self.description = description_dict
+
+    def set_name(self, name, language_id):
+        name_dict = self.name or {}
+        name_dict[language_id] = name
+        self.name = name_dict
+
+    def get_next_id(self, connection):
+        all_products = connection.get_all_products()
+        next_id = max([int(product['id']) for product in all_products]) + 1
+        return next_id
+
+    def get_xml(self, connection):
+        schema = connection.get_product_schema(to_dict=True)
+        # schema['prestashop']['product']['id'] = self.id or self.get_next_id(connection)
+
+        # schema['prestashop']['product']['name'] = self.reference or 'test'
+        connection.get_all_products()
+        if self.name:
+            for language_id, text in self.name.items():
+                translate_info = {
+                    '@id': str(language_id),
+                    '@xlink:href': connection.url + '/api/languages/' + str(language_id),
+                    '#text': text
+                }
+                schema['prestashop']['product']['name']['language'] = list(filter(lambda x: x.get('@id') != str(language_id), schema['prestashop']['product']['name']['language']))
+                schema['prestashop']['product']['name']['language'].append(translate_info)
+
+        if self.description:
+            for language_id, text in self.description.items():
+                translate_info = {
+                    '@id': str(language_id),
+                    '@xlink:href': connection.url + '/api/languages/' + str(language_id),
+                    '#text': text
+                }
+
+                schema['prestashop']['product']['description']['language'] = list(filter(lambda x: x.get('@id') != str(language_id), schema['prestashop']['product']['description']['language']))
+                schema['prestashop']['product']['description']['language'].append(translate_info)
+
+        schema['prestashop']['product']['position_in_category'] = '1'
+
+        return schema

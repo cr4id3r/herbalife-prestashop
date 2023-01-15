@@ -5,9 +5,9 @@ SHOP_API_ENDPOINT = 'http://localhost:8080/api/'
 
 prestashop = PrestaShopWebService(SHOP_API_ENDPOINT, KEY)
 
-def add_product():
-    prestashop = PrestaShopWebService(SHOP_API_ENDPOINT, KEY)
-
+def add_product(product_model):
+    product = prestashop.add('products', product_model)
+    print(product)
 
 def get_all_products():
     products = prestashop.get('products')
