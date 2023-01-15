@@ -19,6 +19,9 @@ class PrestaShopConnection:
             headers['Content-Type'] = 'application/xml'
 
         response = self.session.request(method, target_endpoint, data=data, auth=(self.key, ''), headers=headers)
+        if method == 'POST':
+            return response
+
         xml_parsed = xmltodict.parse(response.content)
 
         return xml_parsed

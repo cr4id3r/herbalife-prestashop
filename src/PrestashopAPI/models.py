@@ -3,6 +3,7 @@
 
 class Product:
     id = None
+    price = 0
     reference = None
     name = None
     description = None
@@ -49,6 +50,9 @@ class Product:
                 schema['prestashop']['product']['description']['language'] = list(filter(lambda x: x.get('@id') != str(language_id), schema['prestashop']['product']['description']['language']))
                 schema['prestashop']['product']['description']['language'].append(translate_info)
 
-        schema['prestashop']['product']['position_in_category'] = '1'
+        schema['prestashop']['product']['position_in_category'] = {'#text': '1', '@notFilterable': True}
+        schema['prestashop']['product']['id_category_default'] = {'#text': '2', '@xlink:href': 'http://localhost:8080/api/categories/2'}
+        schema['prestashop']['product']['price'] = str(self.price)
+        schema['prestashop']['product']['state'] = str(1)
 
         return schema
