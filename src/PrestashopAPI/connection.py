@@ -57,6 +57,8 @@ class PrestaShopConnection:
 if __name__ == '__main__':
     connection = PrestaShopConnection('http://localhost:8080', 'DMEVDCHDY1F7BGPBM7IQNJ7XFMZJCPIJ')
     t = Product()
-    t.set_name('nombre test', 1)
-    t.set_description('description test', 1)
+    t.set_name('Adri example', 1)
+    t.set_name('Adri example italiano', 2)
+    t.set_description('Esto es un ejemplo de contenido', 1)
+    t.set_description('Esto es un ejemplo de italiano', 2)
     connection.add_product(t)
