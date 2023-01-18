@@ -1,9 +1,5 @@
 import requests as requests
-import xml.etree.ElementTree as ET
-
 import xmltodict as xmltodict
-
-from src.PrestashopAPI.models import Product
 
 
 class PrestaShopConnection:
@@ -53,12 +49,28 @@ class PrestaShopConnection:
         response = self.perform_request('POST', 'products', data=xml_string)
         print(response)
 
+    def get_language(self, language_id):
+        response = self.perform_request('GET', 'languages/' + language_id)
+        return response['prestashop']['language']
+
+    def get_all_languages(self):
+        response = self.perform_request('GET', 'languages')
+        languages_list = []
+        for language_element in response['prestashop']['languages']['language']:
+            language_info = self.get_language(language_element['@id'])
+            languages_list.append(language_info)
+
+        return languages_list
+
 
 if __name__ == '__main__':
     connection = PrestaShopConnection('http://localhost:8080', 'DMEVDCHDY1F7BGPBM7IQNJ7XFMZJCPIJ')
-    t = Product()
-    t.set_name('Adri example', 1)
-    t.set_name('Adri example italiano', 2)
-    t.set_description('Esto es un ejemplo de contenido', 1)
-    t.set_description('Esto es un ejemplo de italiano', 2)
-    connection.add_product(t)
+    # t = Product()
+    # t.set_name('Adri example', 1)
+    # t.set_name('Adri example italiano', 2)
+    # t.set_description('Esto es un ejemplo de contenido', 1)
+    # t.set_description('Esto es un ejemplo de italiano', 2)
+    # connection.add_product(t)
+    # print(connection.get_all_languages())
+    # print(connection.get_all_products())
+
